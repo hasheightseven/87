@@ -1,0 +1,36 @@
+name: Deploy to Gituhub Pages
+
+on:
+    push:
+        branches:
+            - main // can be changed
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+        # something to handle errors
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.13" # specify python version    
+            cache: "pip"
+        # something to handle errors
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install Flask-Frozen
+        # Build static site
+        - name: Build static Site
+          run: python build.py
+        # Deploy to github pages
+        - name: Deploy to Github Pages
+          uses: peaceiris/actions-gh-pages@v4
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./static/templates/
+            publish_branch: gh-pages
