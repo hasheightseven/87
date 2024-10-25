@@ -1,4 +1,4 @@
-name: Deploy Python App
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main  # Change this to your main branch name if it's different
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,15 +21,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # Only if needed for generating static files
 
-      - name: Run tests
-        run: ""
-          # If you have tests, run them here
-          pytest  "" # Adjust if using a different testing framework
+      - name: Build static site
+        run: |
+          # Command to generate static files from your Python app
+          # For example, if using Flask-Frozen, you might run:
+          # flask freeze
+          # Or for Django, ensure your static files are collected
+          echo "Building static site..."
 
-      - name: Deploy
-        run: django-admin manage.py
-          # Add your deployment script/command here
-          # This could be a script that uploads to a server or a cloud service
-          echo "Deploying to the server..."
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./path/to/static/files  # Update this to your build/static directory
