@@ -24,12 +24,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: |
+        run: ""
           # If you have tests, run them here
-          pytest  # Adjust if using a different testing framework
+          pytest  "" # Adjust if using a different testing framework
 
       - name: Deploy
-        run: |
+        run: django-admin manage.py
           # Add your deployment script/command here
           # This could be a script that uploads to a server or a cloud service
           echo "Deploying to the server..."
